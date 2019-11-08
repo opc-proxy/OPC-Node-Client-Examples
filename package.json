@@ -1,0 +1,22 @@
+{
+  "name": "opc-node-examples",
+  "version": "0.0.1",
+  "description": "examples for connecting to various configuration of opc-proxies",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opc-proxy/OPC-Node-Client-Examples.git"
+  },
+  "keywords": [
+    "opc"
+  ],
+  "author": "Ale",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/opc-proxy/OPC-Node-Client-Examples/issues"
+  },
+  "homepage": "https://github.com/opc-proxy/OPC-Node-Client-Examples#readme"
+}
