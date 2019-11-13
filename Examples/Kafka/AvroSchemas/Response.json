@@ -1,0 +1,30 @@
+{
+    "name": "JSON_RPC_2_0_Response",
+    "type": "record",
+    "fields": [
+        {
+            "name": "result",
+            "type": ["null","string"],
+            "default":null
+        },
+        {
+            "name": "error",
+            "type":[
+                "null",
+                {
+                    "type":"record", 
+                    "name":"error", 
+                    "fields": [
+                        {"name":"code", "type":"int"},
+                        {"name":"message", "type":"string"}
+                    ]
+                }
+            ],
+            "default": null
+        },
+        {
+            "name": "id",
+            "type": "int"
+        }
+    ]
+}

@@ -18,5 +18,10 @@
   "bugs": {
     "url": "https://github.com/opc-proxy/OPC-Node-Client-Examples/issues"
   },
-  "homepage": "https://github.com/opc-proxy/OPC-Node-Client-Examples#readme"
+  "homepage": "https://github.com/opc-proxy/OPC-Node-Client-Examples#readme",
+  "dependencies": {
+    "avro-schema-registry": "^1.5.1",
+    "avsc": "^5.4.16",
+    "node-rdkafka": "^2.7.1-2"
+  }
 }
