@@ -14,14 +14,14 @@ let message = {
     // here the value must be stringyfied for maximal flexibility, this approach has the advantages:
     // - we can use the same schema for all request (some producer have problems in sendig multiple schemas on same topic). One could go around it with union schemas but has a tedius sintax
     // - On the OPC-proxy side the value will be converted to the proper OPC type
-    params : ["ciao", "78.9"],   
-    id : null 
+    params : ["ciao", "1"],   
+    id : 42 
 }
   
   producer.setValueSerializer(async function(v) {
     try{
         console.log("sending message ", v);
-        let msg = await registry.encodeMessage('OPC-test-10', RPC_schema, v);
+        let msg = await registry.encodeMessage('OPC-request', RPC_schema, v);
         //let msg = await schemaRegistry.encodeBySubject(v, 'subjectName-9')
         console.log("sending message ", msg);
         return msg;  
@@ -33,7 +33,7 @@ let message = {
 
 producer.connect();
 producer.on("ready", ()=>{
-    producer.produce('OPC-test-10', null, 
+    producer.produce('OPC-request', null, 
         message,
        "hey", Date.now(), function(err, offset) {
         // The offset if our acknowledgement level allows us to receive delivery offsets
@@ -50,7 +50,7 @@ producer.on("ready", ()=>{
 
 
 /// ----- CONSUMER ------ ///
-/*
+
 var consumer = new Kafka.KafkaConsumer({
     'group.id': 'NodeConsumer',
     'metadata.broker.list': 'localhost:9092',
@@ -71,18 +71,19 @@ consumer.connect();
 
 consumer
   .on('ready', function() {
-    consumer.subscribe(['test-topic-x']);
+    consumer.subscribe(['OPC-response']);
     consumer.consume();
 })
   .on('data', async function(data) {
     // Output the actual message contents
     try{
-       let key = await registry.decode( data.key );
+       let key =   data.key.toString()  ;
        let message = await registry.decode( data.value );
-       console.log("topic: ",data.topic ,"  key :", key, "  value: ", message.value, " type: ", message.type, "  timestamp: ",  new Date(data.timestamp));
+       console.log("topic: ",data.topic ,"  key :", key, "  value: ", message ,  "  timestamp: ",  new Date(data.timestamp));
     }
     catch(e){
         console.log("error: ", e);
     }
+    consumer.disconnect();
 });
-*/
+
