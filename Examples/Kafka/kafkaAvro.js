@@ -71,7 +71,7 @@ consumer.connect();
 
 consumer
   .on('ready', function() {
-    consumer.subscribe(['OPC-response']);
+    consumer.subscribe(['OPC-response','OPC']);
     consumer.consume();
 })
   .on('data', async function(data) {
@@ -84,6 +84,11 @@ consumer
     catch(e){
         console.log("error: ", e);
     }
-    consumer.disconnect();
+    finally{
+     consumer.disconnect();
+     consumer.unsubscribe();
+     consumer.unassign();    
+
+    }
 });
 
