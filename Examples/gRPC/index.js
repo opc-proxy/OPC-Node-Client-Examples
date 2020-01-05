@@ -18,7 +18,7 @@ var packageDefinition = protoLoader.loadSync(
 
 var grpc_connect = grpc.loadPackageDefinition(packageDefinition).OpcGrpcConnect;
 
-var client = new grpc_connect.Http('localhost:5055', grpc.credentials.createInsecure());
+var client = new grpc_connect.Http('localhost:5051', grpc.credentials.createInsecure());
 grpc_promise.promisifyAll(client);
 
  // Write Request

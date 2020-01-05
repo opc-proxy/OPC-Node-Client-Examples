@@ -15,8 +15,8 @@ npm install
 
 # Run the example
 
-First run the OPC-Proxy configured with a gRPC endpont, this example assumes an OPC-Proxy running on ``port:5051``,
-it also assume that the OPC-server is the [Python-OPCUA](https://github.com/FreeOpcUa/python-opcua/blob/master/examples/server-minimal.py). Then run the example with:
+First run the OPC-Proxy configured with a gRPC endpont, this example assumes an OPC-Proxy running on ``port:5051``, 
+which is default, it also assume that the OPC-server is the [Python-OPCUA](https://github.com/FreeOpcUa/python-opcua/blob/master/examples/server-minimal.py), or in general that there will be an exposed variable called ``MyVariable``. Then run the example with:
 
 ```bash
 cd Examples/gRPC
