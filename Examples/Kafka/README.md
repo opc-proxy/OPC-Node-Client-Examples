@@ -25,7 +25,7 @@ npm install
 
 ### Run 
 
-```
+```bash
 cd Examples/Kafka
 # Run the OPC-server
 python python_test_server.py
