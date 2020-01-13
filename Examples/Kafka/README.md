@@ -34,4 +34,12 @@ python python_test_server.py
 node kafkaAvro.js
 ```
 
+This will run an OPC-server with  ``MyVariable`` increasing by 0.1 every 2 second. 
+A kafka consumer is registered on topics ``OPC`` (default data stream) and ``OPC-response`` (default for RPC-response).
+Every 10 sec, an RPC-write request is made resetting the value of ``MyVariable`` to 1.
+
+Also keep in mind that the OPC-server will push variables values (if they change) to the OPC-Proxy
+with rate of 1 sec, you can query the OPC-Proxy much faster than that, the write request will be forwared
+to the server immediately, but read request will read the latest value from the memory cache of the
+OPC-Proxy.
  
