@@ -23,9 +23,10 @@ grpc_promise.promisifyAll(client);
 
  // Write Request
 client.WriteOpcNode()
-	.sendMessage({name : "MyVariable", value : "15" })
+	.sendMessage({name : "MyVariable", value : "1" })
     	.then(response => {
-      		console.log('WriteResponse:\n', response);
+      		console.log('\n\nWriteResponse:\n', response);
+      		console.log('\n');
     	})
     	.catch(err => {
       		console.log('Error:\n', err);
@@ -36,7 +37,7 @@ client.WriteOpcNode()
 client.ReadOpcNodes()
     .sendMessage({ names: ["MyVariable"] })
     .then(response => {
-      console.log('ReadResponse:\n', response);
+      console.log('\n\nReadResponse:\n', response);
     })
     .catch(err => {
       console.log('Error:\n', err);

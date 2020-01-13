@@ -20,23 +20,15 @@ which is default, it also assume that the OPC-server is the [Python-OPCUA](https
 
 ```bash
 cd Examples/gRPC
+# Run the python opc-server
+python python_test_server.py 
+# Run the OPC-Proxy with ``grpcConnector : true``, then 
+# Run the client
 node index.js
 ```
 This will read and write a value to ``MyVariable`` of the python test server example. 
-To see the effect we suggest to modify the ``try`` block of the opc-test server example as follows:
-
-```python
-try:
-    count = 1
-    myvar.set_value(count)
-    while True:
-        time.sleep(1)
-        #count += 0.1
-        #myvar.set_value(count)
-finally:
-    #close connection, remove subcsriptions, etc
-    server.stop()
-```
+The value of MyVariable is always increasing by 0.1 every half a second. The client will read
+its value and reset it to 1.
 
 Also keep in mind that the OPC-server will push variables values (if they change) to the OPC-Proxy
 with rate of 1 sec, you can query the OPC-Proxy much faster than that, the write request will be forwared

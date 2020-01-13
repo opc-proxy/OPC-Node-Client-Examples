@@ -2,50 +2,52 @@ var Kafka = require('node-rdkafka');
 const registry = require('avro-schema-registry')('http://localhost:8081');
 const fs = require('fs');
 
+
+////----------PRODUCER-------------////
+
+// Producer for the write-RPC-Request
 var producer = new Kafka.HighLevelProducer({
   'metadata.broker.list': 'localhost:9092',
 });
 
 
-
+// Load the Avro schema
 let RPC_schema = JSON.parse(fs.readFileSync("AvroSchemas/Request.json"));
-let message = {
+
+let WriteRequest= {
     method :"write",
     // here the value must be stringyfied for maximal flexibility, this approach has the advantages:
     // - we can use the same schema for all request (some producer have problems in sendig multiple schemas on same topic). One could go around it with union schemas but has a tedius sintax
     // - On the OPC-proxy side the value will be converted to the proper OPC type
-    params : ["ciao", "1"],   
-    id : 42 
+    params : ["MyVariable", "1"],   
 }
-  
-  producer.setValueSerializer(async function(v) {
+
+// Set the Avro serializer
+producer.setValueSerializer(async function(msg) {
     try{
-        console.log("sending message ", v);
-        let msg = await registry.encodeMessage('OPC-request', RPC_schema, v);
-        //let msg = await schemaRegistry.encodeBySubject(v, 'subjectName-9')
-        console.log("sending message ", msg);
-        return msg;  
+        let encoded_msg = await registry.encodeMessage('OPC-request', RPC_schema, msg);
+        return encoded_msg;  
     }
     catch(e){
         console.log(e);
     }
 });
 
-producer.connect();
+// Reset the value of MyVariable to 1 every 10 sec
 producer.on("ready", ()=>{
-    producer.produce('OPC-request', null, 
-        message,
-       "hey", Date.now(), function(err, offset) {
-        // The offset if our acknowledgement level allows us to receive delivery offsets
-         //producer.disconnect();
-         console.log("the offset is :" + offset);
-         console.log(err);
-        producer.disconnect();
-
-    });
+  setInterval(()=>{
+    console.log("\n\n\n");
+    console.log("Sending Write RPC Request, set:  MyVariable  to  1");
+    producer.produce('OPC-request', null,
+           WriteRequest,
+           "myKeyToWriteReq", Date.now(), function(err, offset) {
+           console.log("Write request dispatched, the Kafka offset is :" + offset);
+      });
+  }, 10000);
     
 });
 
+producer.connect();
 
 
 
@@ -61,13 +63,12 @@ var consumer = new Kafka.KafkaConsumer({
         console.error(err);
       } else {
         // Commit went through. Let's log the topic partitions
-        console.log(topicPartitions);
+        console.log("Consumer:: committed read topics");
       }
   
     }
   });
 
-consumer.connect();
 
 consumer
   .on('ready', function() {
@@ -78,17 +79,15 @@ consumer
     // Output the actual message contents
     try{
        let key =   data.key.toString()  ;
+       // deserializing the message
        let message = await registry.decode( data.value );
-       console.log("topic: ",data.topic ,"  key :", key, "  value: ", message ,  "  timestamp: ",  new Date(data.timestamp));
+       console.log("Received message on Topic: ", data.topic, " with timestamp ", new Date(data.timestamp));
+       console.log("\t\t", message);
+       if(data.topic === "OPC-response") console.log("\n\n\n");
     }
     catch(e){
         console.log("error: ", e);
     }
-    finally{
-     consumer.disconnect();
-     consumer.unsubscribe();
-     consumer.unassign();    
-
-    }
 });
 
+consumer.connect();
