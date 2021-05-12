@@ -23,7 +23,7 @@
     "@grpc/proto-loader": "^0.5.3",
     "avro-schema-registry": "^1.5.1",
     "avsc": "^5.4.16",
-    "grpc": "^1.24.2",
+    "grpc": "^1.24.9",
     "grpc-promise": "^1.4.0",
     "node-rdkafka": "^2.7.1-2"
   }
